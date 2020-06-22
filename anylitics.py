@@ -13,12 +13,15 @@ farm21DB = mysql.connector.connect(
     database="homestead"
 )
 
+# Get all data
 cursor = farm21DB.cursor(dictionary=True, buffered=True)
 client = MongoClient('mongodb://localhost:27017/')
 db = client.predictions
 dbFarm21 = client.weatherDataFarm21
 
 allPredictionData = db.nnNoUvNoVis.find({})
+
+# Difference Calculater in percentages
 
 
 def calculateDiff(actual, prediction):
@@ -28,6 +31,7 @@ def calculateDiff(actual, prediction):
 differencePercentage = []
 differenceAbsolute = []
 
+# Calculate the diffs and print this in console.
 for prediction in allPredictionData:
     print(f"actual soil Moisture: {prediction['soil_moisture_10']} prediction: {prediction['soil_moisture_10_prediction']} difference {calculateDiff(prediction['soil_moisture_10'], prediction['soil_moisture_10_prediction'])}")
     differencePercentage.append(abs(calculateDiff(prediction['soil_moisture_10'], prediction['soil_moisture_10_prediction'])))
