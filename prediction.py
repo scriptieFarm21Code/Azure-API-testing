@@ -27,7 +27,7 @@ cursor.execute(f"SELECT * FROM readings WHERE id > {latestID} AND sensor_id = {s
 result = cursor.fetchall()
 
 for newReading in result:
-
+    # Create the whole data object used for graphs
     predictionData = getWeatherData(newReading['measured_at'], newReading['latitude'], newReading['longitude'])
     predictionData['soil_moisture_10'] = float(newReading['soil_moisture_10'])
     predictionData['soil_moisture_20'] = float(newReading['soil_moisture_20'])
@@ -47,6 +47,7 @@ for newReading in result:
     predictionData['soilTypeId'] = int(newReading['soil_type_id'])
     predictionData['timestampReadingUnix'] = int(convertTimeStap(newReading['measured_at']))
     print(convertTimeStap(newReading['measured_at']))
+    # Get prediction Data
     prediction = getPrediction(predictionData)
     predictionData['soil_moisture_10_prediction'] = prediction['soilMoistureTen']
     predictionData['soil_moisture_10_perctage'] = prediction['percentage']
